@@ -10,8 +10,6 @@ sudo iwconfig wlx00c0ca53a4b4 channel 6
 
 sudo iw dev
 ```
-
-
 ## Wireshark filters
 
 ### Frame type
@@ -49,9 +47,18 @@ sudo iw dev
 (wlan.fc.type_subtype == 8) && (wlan.ta == 84:0b:7c:b6:87:26)
 ```
 
-# Process Beacon  Frames
+# Python code
 
-## Usage
+## Virtual environment
+
+```console
+python3 -m venv -venv
+source .venv/bin/activate
+pip install -r requirements.txt
+```
+
+## Process beacon frame
+### Usage
 
 python processBeaconFrame.py -i <input_file> -a <access_point_mac>
 
