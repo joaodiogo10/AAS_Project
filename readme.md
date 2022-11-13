@@ -52,7 +52,7 @@ sudo iw dev
 ## Virtual environment
 
 ```console
-python3 -m venv -venv
+python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
 ```
@@ -62,11 +62,11 @@ pip install -r requirements.txt
 ### Data sampling
 #### Usage
 
-python processBeaconFrame.py -i <input_file> -a <access_point_mac>
+python sampleBeaconFrame.py -i <input_file> -a <access_point_mac>
 
 Example:
 ```console
-python3 processBeaconFrame.py -i packets/homeBeacon2.pcapng -a 84:0b:7c:b6:87:26
+python3 sampleBeaconFrame.py -i packets/homeBeacon2.pcapng -a 84:0b:7c:b6:87:26
 ```
 
 ### Plot data
@@ -79,19 +79,19 @@ python3 plotBeaconFrame.py -i <input_file> [-o <output_file>]
 
 Example:
 ```console
-python3 plotBeaconFrame.py -i packets/homeBeacon1.csv
+python3 plotBeaconFrame.py -i packets/homeBeacon2.csv
 ```
 
 ![beacon plot example](images/beaconPlot.png)
-## Authentication transaction
+## Association transaction
 ### Data sampling
 #### Usage
 
-python3 processAuthentication.py -i <input_file> -a <access_point_mac> [-v]
+python3 sampleAssociation.py -i <input_file> -a <access_point_mac> [-v]
 
 Example:
 ```console
-python3 processAuthentication.py -i packets/homeAuthentication.pcapng -a 84:0b:7c:b6:87:26 -v 
+python3 sampleAssociation.py -i packets/homeAssociation.pcapng -a 84:0b:7c:b6:87:26 -v 
 ```
 ### Plot data
 
@@ -99,11 +99,11 @@ python3 processAuthentication.py -i packets/homeAuthentication.pcapng -a 84:0b:7
 
 Use the output file from the previous step as the input file.
 
-python3 plotAuthentication.py -i <input_file> [-o <output_file>]
+python3 plotAssociation.py -i <input_file> [-o <output_file>]
 
 Example:
 ```console
-python3 plotAuthentication.py -i packets/homeAssociation.csv
+python3 plotAssociation.py -i packets/homeAssociation.csv
 ```
 
 ![association plot example](images/homeAssociation.png)
