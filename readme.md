@@ -47,7 +47,7 @@ sudo iw dev
 (wlan.fc.type_subtype == 8) && (wlan.ta == 84:0b:7c:b6:87:26)
 ```
 
-# Python code
+# Python code data acquisition
 
 ## Virtual environment
 
@@ -64,5 +64,15 @@ python processBeaconFrame.py -i <input_file> -a <access_point_mac>
 
 Example:
 ```console
-python processBeaconFrame.py -i packets/homeBeacon2.pcapng -a 84:0b:7c:b6:87:26
+python3 processBeaconFrame.py -i packets/homeBeacon2.pcapng -a 84:0b:7c:b6:87:26
+```
+
+## Process beacon authentication
+### Usage
+
+python3 processAuthentication.py -i <input_file> -a <access_point_mac> [-v]
+
+Example:
+```console
+python3 processAuthentication.py -i packets/homeAuthentication.pcapng -a 84:0b:7c:b6:87:26 -v 
 ```

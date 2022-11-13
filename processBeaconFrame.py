@@ -1,12 +1,11 @@
 import sys
 import argparse
-import datetime
-from netaddr import EUI, IPAddress, IPSet
+from netaddr import EUI
 import pyshark
 
 EXPECTED_BEACON_INTERVAL = 102400 #microseconds
 
-def process_packet_pcap(capture, outfile):
+def process_data_pcap(capture, outfile):
     prev_seq_number = 0 
     prev_beacon_timestamp = 0
     timestamp_deviation = 0
@@ -57,9 +56,9 @@ def main():
     #beacon frame and access point mac address
     filter = f"(wlan.fc.type_subtype == 8) && (wlan.ta == {ap_mac})"
     
+    capture = pyshark.FileCapture(fileInput, display_filter=filter)
     with open(fileOutput,'w') as outfile:
-        capture = pyshark.FileCapture(fileInput, display_filter=filter)
-        process_packet_pcap(capture, outfile)
+        process_data_pcap(capture, outfile)
 
 if __name__ == '__main__':
     main()
