@@ -47,7 +47,7 @@ sudo iw dev
 (wlan.fc.type_subtype == 8) && (wlan.ta == 84:0b:7c:b6:87:26)
 ```
 
-# Python code data acquisition
+# Python code
 
 ## Virtual environment
 
@@ -57,8 +57,10 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-## Process beacon frame
-### Usage
+## Beacon frame
+
+### Data sampling
+#### Usage
 
 python processBeaconFrame.py -i <input_file> -a <access_point_mac>
 
@@ -67,8 +69,20 @@ Example:
 python3 processBeaconFrame.py -i packets/homeBeacon2.pcapng -a 84:0b:7c:b6:87:26
 ```
 
-## Process beacon authentication
-### Usage
+### Plot data
+
+#### Usage
+
+python3 plotBeaconFrame.py -i <input_file> [-o <output_file>]
+
+Use the output file from the previous step.
+
+Plot example:
+
+![beacon plot example](images/beaconPlot.png)
+## Authentication transaction
+### Data sampling
+#### Usage
 
 python3 processAuthentication.py -i <input_file> -a <access_point_mac> [-v]
 
@@ -76,3 +90,4 @@ Example:
 ```console
 python3 processAuthentication.py -i packets/homeAuthentication.pcapng -a 84:0b:7c:b6:87:26 -v 
 ```
+
