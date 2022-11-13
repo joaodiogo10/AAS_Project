@@ -82,7 +82,7 @@ def process_next_transaction(capture_iter, ap_mac, outfile):
     logging.debug(f"Authentication response (AP -> client). No. {pkt.number}")
     timestamp_authentication_response = float(pkt.sniff_timestamp)
 
-    time_interval_authentication = timestamp_authentication_response - timestamp_authentication_request
+    time_interval_authentication = (timestamp_authentication_response - timestamp_authentication_request) * 10e+6 #us
 
     pkt = skip_duplicate_pkt(capture_iter, is_authentication_response, ap_mac)
 
@@ -112,7 +112,7 @@ def process_next_transaction(capture_iter, ap_mac, outfile):
     logging.debug(f"Association response (AP -> client). No. {pkt.number}")
     timestamp_association_response = float(pkt.sniff_timestamp)
 
-    time_interval_association = timestamp_association_response - timestamp_association_request
+    time_interval_association = (timestamp_association_response - timestamp_association_request) * 10e+6 #us
 
     pkt = skip_duplicate_pkt(capture_iter, is_association_response, ap_mac)
     
@@ -142,7 +142,7 @@ def process_next_transaction(capture_iter, ap_mac, outfile):
     logging.debug(f"EAPOL (Message 2) (client -> AP). No. {pkt.number}")
     timestamp_eapol_message_2 = float(pkt.sniff_timestamp)
 
-    time_interval_eapol_first = timestamp_eapol_message_2 - timestamp_eapol_message_1
+    time_interval_eapol_first = (timestamp_eapol_message_2 - timestamp_eapol_message_1) * 10e+6 #us
     pkt = skip_duplicate_pkt(capture_iter, is_eapol_msg_1, ap_mac)
 
     #---------------------------------------------------
@@ -171,11 +171,12 @@ def process_next_transaction(capture_iter, ap_mac, outfile):
     logging.debug(f"EAPOL (Message 4) (client -> AP). No. {pkt.number}")
     timestamp_eapol_message_4 = float(pkt.sniff_timestamp)
 
-    time_interval_eapol_second = timestamp_eapol_message_4 - timestamp_eapol_message_3
+    time_interval_eapol_second = (timestamp_eapol_message_4 - timestamp_eapol_message_3) * 10e+6 #us
 
-    logging.debug(f"----------------Transaction Complete----------------\n")
-    outfile.write(f"{time_interval_authentication},{time_interval_association},{time_interval_eapol_first},{time_interval_eapol_second}\n")
     num_complete_transaction += 1
+    total_transaction = num_complete_transaction + num_skipped_transaction
+    logging.debug(f"----------------Transaction Complete {total_transaction}----------------\n")
+    outfile.write(f"{time_interval_authentication},{time_interval_association},{time_interval_eapol_first},{time_interval_eapol_second}\n")
 
 def process_data_pcap(capture, ap_mac, outfile):
     global num_complete_transaction

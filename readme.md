@@ -73,11 +73,14 @@ python3 processBeaconFrame.py -i packets/homeBeacon2.pcapng -a 84:0b:7c:b6:87:26
 
 #### Usage
 
+Use the output file from the previous step as the input file.
+
 python3 plotBeaconFrame.py -i <input_file> [-o <output_file>]
 
-Use the output file from the previous step.
-
-Plot example:
+Example:
+```console
+python3 plotBeaconFrame.py -i packets/homeBeacon1.csv
+```
 
 ![beacon plot example](images/beaconPlot.png)
 ## Authentication transaction
@@ -90,4 +93,18 @@ Example:
 ```console
 python3 processAuthentication.py -i packets/homeAuthentication.pcapng -a 84:0b:7c:b6:87:26 -v 
 ```
+### Plot data
+
+#### Usage
+
+Use the output file from the previous step as the input file.
+
+python3 plotAuthentication.py -i <input_file> [-o <output_file>]
+
+Example:
+```console
+python3 plotAuthentication.py -i packets/homeAssociation.csv
+```
+
+![association plot example](images/homeAssociation.png)
 
