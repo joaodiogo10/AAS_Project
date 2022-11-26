@@ -13,4 +13,5 @@ py==1.11.0
 pyparsing==3.0.9
 pyshark==0.5.3
 python-dateutil==2.8.2
+scipy==1.9.3
 six==1.16.0
