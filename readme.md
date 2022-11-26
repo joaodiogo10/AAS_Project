@@ -108,3 +108,29 @@ python3 plotAssociation.py -i packets/homeAssociation.csv
 
 ![association plot example](images/homeAssociation.png)
 
+
+## Observation windows
+
+Use the output csv file from the previous steps as the input file.
+
+
+#### SEQUENTIAL Observation Windows
+```console
+python baseObsWindows.py -i packets/homeBeacon2.csv -m 1 -w 20
+python baseObsWindows.py -i packets/homeAssociation.csv -m 1 -w 5
+```
+
+#### SLIDING Observation Windows
+```console
+python baseObsWindows.py -i packets/homeBeacon2.csv -m 2 -s 5 -w 20
+python baseObsWindows.py -i packets/homeAssociation.csv -m 2 -s 2 -w 5
+```
+
+#### MULTIPLE SLIDING Observation Windows
+
+```console
+python baseObsWindows.py -i packets/homeBeacon2.csv -m 3 -s 5 -w 5 10
+python baseObsWindows.py -i packets/homeAssociation.csv -m 2 -s 2 -w 5 10
+```
+
+
