@@ -4,13 +4,17 @@ from netaddr import EUI
 import pyshark
 import logging, sys
 
-
-
 ASSOCIATION_REQUEST_SUBTYPE = 0
 ASSOCIATION_RESPONSE_SUBTYPE = 1
 AUTHENTICATIONS_SUBTYPE = 11
 
-#Transation sequence:
+# Measurements:
+#   Time between Authentication request - Authentication response
+#   Time between Association request - Association response
+#   Time between Association response - EAPOL (Message 1)
+#   Time between EAPOL (Message 2) - EAPOL (Message 3)
+
+# Transation sequence:
 #   Authentication request     (client -> AP)
 #   Authentication response    (AP -> client)
 #   Association request        (client -> AP)
@@ -128,6 +132,8 @@ def process_next_transaction(capture_iter, ap_mac, outfile):
     logging.debug(f"EAPOL (Message 1) (AP -> client). No. {pkt.number}")
     timestamp_eapol_message_1 = float(pkt.sniff_timestamp)
 
+    time_interval_eapol_first = (timestamp_eapol_message_1 - timestamp_association_response) * 10e+6 #us
+
     pkt = skip_duplicate_pkt(capture_iter, is_eapol_msg_1, ap_mac)
 
     #---------------------------------------------------
@@ -142,7 +148,6 @@ def process_next_transaction(capture_iter, ap_mac, outfile):
     logging.debug(f"EAPOL (Message 2) (client -> AP). No. {pkt.number}")
     timestamp_eapol_message_2 = float(pkt.sniff_timestamp)
 
-    time_interval_eapol_first = (timestamp_eapol_message_2 - timestamp_eapol_message_1) * 10e+6 #us
     pkt = skip_duplicate_pkt(capture_iter, is_eapol_msg_1, ap_mac)
 
     #---------------------------------------------------
@@ -156,6 +161,8 @@ def process_next_transaction(capture_iter, ap_mac, outfile):
     
     logging.debug(f"EAPOL (Message 3) (AP -> client). No. {pkt.number}")
     timestamp_eapol_message_3 = float(pkt.sniff_timestamp)
+    
+    time_interval_eapol_second = (timestamp_eapol_message_3 - timestamp_eapol_message_2) * 10e+6 #us
 
     pkt = skip_duplicate_pkt(capture_iter, is_eapol_msg_3, ap_mac)
 
@@ -171,7 +178,6 @@ def process_next_transaction(capture_iter, ap_mac, outfile):
     logging.debug(f"EAPOL (Message 4) (client -> AP). No. {pkt.number}")
     timestamp_eapol_message_4 = float(pkt.sniff_timestamp)
 
-    time_interval_eapol_second = (timestamp_eapol_message_4 - timestamp_eapol_message_3) * 10e+6 #us
 
     num_complete_transaction += 1
     total_transaction = num_complete_transaction + num_skipped_transaction
@@ -187,7 +193,7 @@ def process_data_pcap(capture, ap_mac, outfile):
     count = 0
 
     #header
-    outfile.write("time_interval_authentication,time_interval_association,time_interval_eapol_first,time_interval_eapol_second\n"),
+    outfile.write("time_interval_authentication (us),time_interval_association (us),time_interval_eapol_first (us),time_interval_eapol_second (us)\n"),
     capture_iter = iter(capture)
     
     while(True):

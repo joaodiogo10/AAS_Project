@@ -35,7 +35,7 @@ sudo iw dev
 
 ### Examples
 
-- (association request || association reponse || authentications || authentication eapol) && (AP address (transmission) || AP address (receiver) )
+- (association request || association response || authentications || authentication eapol) && (AP address (transmission) || AP address (receiver) )
 
 ```console
 (wlan.fc.type_subtype == 0 || wlan.fc.type_subtype == 1 || wlan.fc.type_subtype == 11 || eapol.keydes.type == 2) && (wlan.ta == 84:0b:7c:b6:87:26 || wlan.ra == 84:0b:7c:b6:87:26)
