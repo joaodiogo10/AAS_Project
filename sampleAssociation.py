@@ -166,17 +166,18 @@ def process_next_transaction(capture_iter, ap_mac, outfile):
 
     pkt = skip_duplicate_pkt(capture_iter, is_eapol_msg_3, ap_mac)
 
+    #Ignore last transaction packet
     #---------------------------------------------------
     #--------EAPOL (Message 4) (client -> AP)-----------
     #---------------------------------------------------
-    if(not is_eapol_msg_4(pkt, ap_mac)):
-        logging.debug(f"Missing eapol message 4. No. {pkt.number}")
-        logging.debug(f"----------------Transaction Skipped----------------\n")
-        num_skipped_transaction += 1
-        return
+    # if(not is_eapol_msg_4(pkt, ap_mac)):
+    #     logging.debug(f"Missing eapol message 4. No. {pkt.number}")
+    #     logging.debug(f"----------------Transaction Skipped----------------\n")
+    #     num_skipped_transaction += 1
+    #     return
     
-    logging.debug(f"EAPOL (Message 4) (client -> AP). No. {pkt.number}")
-    timestamp_eapol_message_4 = float(pkt.sniff_timestamp)
+    # logging.debug(f"EAPOL (Message 4) (client -> AP). No. {pkt.number}")
+    # timestamp_eapol_message_4 = float(pkt.sniff_timestamp)
 
 
     num_complete_transaction += 1
