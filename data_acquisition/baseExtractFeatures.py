@@ -69,9 +69,10 @@ def extractFeatures(dirname,basename,nObs,allwidths):
         features=np.array([])
         for oW in allwidths:
             obsfilename=dirname+"/"+basename+str(o)+"_w"+str(oW)+".dat"
-            print(obsfilename)
+            #print(obsfilename)
             subdata=np.loadtxt(obsfilename)
-                
+            subdata = subdata.reshape(len(subdata),1)
+            
             faux=extractStats(subdata)    
             features=np.hstack((features,faux))
             
