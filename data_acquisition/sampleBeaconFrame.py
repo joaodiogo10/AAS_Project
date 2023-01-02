@@ -11,7 +11,7 @@ def process_data_pcap(capture, outfile):
     timestamp_deviation = 0
 
     #header
-    outfile.write(f"seq_num, beacon_timestamp, beacon_interval (us), timestamp_deviation (us)\n")
+    outfile.write(f"beacon_interval (us)\n")
     for pkt in capture:
         #Retrieve Data
         seq_num = int(pkt.wlan.seq)
@@ -22,7 +22,7 @@ def process_data_pcap(capture, outfile):
         timestamp_deviation = EXPECTED_BEACON_INTERVAL - beacon_interval
 
         if seq_num_diff == 1:
-            outfile.write(f"{seq_num},{beacon_timestamp},{beacon_interval},{timestamp_deviation}\n")
+            outfile.write(f"{beacon_interval}\n")
         
         prev_seq_number = seq_num
         prev_beacon_timestamp = beacon_timestamp

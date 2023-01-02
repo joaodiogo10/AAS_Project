@@ -116,21 +116,21 @@ Use the output csv file from the previous steps as the input file.
 
 #### SEQUENTIAL Observation Windows
 ```console
-python baseObsWindows.py -i packets/homeBeacon2.csv -m 1 -w 20
-python baseObsWindows.py -i packets/homeAssociation.csv -m 1 -w 5
+python3 baseObsWindows.py -i packets/homeBeacon2.csv -m 1 -w 300
+python3 baseObsWindows.py -i packets/homeAssociation.csv -m 1 -w 5
 ```
 
 #### SLIDING Observation Windows
 ```console
-python baseObsWindows.py -i packets/homeBeacon2.csv -m 2 -s 5 -w 20
-python baseObsWindows.py -i packets/homeAssociation.csv -m 2 -s 2 -w 5
+python3 baseObsWindows.py -i packets/homeBeacon2.csv -m 2 -s 5 -w 300
+python3 baseObsWindows.py -i packets/homeAssociation.csv -m 2 -s 2 -w 5
 ```
 
 #### MULTIPLE SLIDING Observation Windows
 
 ```console
-python baseObsWindows.py -i packets/homeBeacon2.csv -m 3 -s 5 -w 5 10
-python baseObsWindows.py -i packets/homeAssociation.csv -m 3 -s 2 -w 5 10
+python3 baseObsWindows.py -i packets/homeBeacon2.csv -m 3 -s 5 -w 300 600
+python3 baseObsWindows.py -i packets/homeAssociation.csv -m 3 -s 2 -w 5 10
 ```
 
 ## Extract feature
@@ -138,7 +138,7 @@ python baseObsWindows.py -i packets/homeAssociation.csv -m 3 -s 2 -w 5 10
 Use the generated sliding windows outputs.
 
 ```
-python baseExtractFeatures.py -i windows/homeBeacon2_obs_m1 -w 20
-python baseExtractFeatures.py -i windows/homeAssociation_obs_s2_m3 -w 5 10
+python3 baseExtractFeatures.py -i windows/homeBeacon2_obs_m1 -w 300
+python3 baseExtractFeatures.py -i windows/homeAssociation_obs_s2_m3 -w 5 10
 ```
 

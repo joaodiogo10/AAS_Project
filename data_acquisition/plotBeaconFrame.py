@@ -25,7 +25,7 @@ def main():
 
     np_data = np.asarray(data, dtype = float)
 
-    line1 = plt.plot(np_data[:,2])
+    line1 = plt.plot(np_data[:,0])
     plt.setp(line1, color='r', linestyle='-')
     plt.title("Interval between 2 consecutive beacons")
     plt.xlabel("Sample number")
