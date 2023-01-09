@@ -43,7 +43,7 @@ def skip_duplicate_pkt(capture_iter, condition, ap_mac):
     
     return pkt
 
-def process_next_transaction(capture_iter, ap_mac, outfile):
+def process_next_transaction(capture_iter, ap_macs, outfile, eapol=True):
     global num_complete_transaction
     global num_skipped_transaction
 
@@ -67,18 +67,20 @@ def process_next_transaction(capture_iter, ap_mac, outfile):
     #------Authentication request (client -> AP)--------
     #---------------------------------------------------
     pkt = next(capture_iter) 
-    while(not is_authentication_request(pkt, ap_mac)): # Find authentication request
+    access_point_mac = EUI(pkt.wlan.ra)
+    while(not is_authentication_request(pkt, access_point_mac)): # Find authentication request
         pkt = next(capture_iter) 
+        access_point_mac = EUI(pkt.wlan.ra)
 
     logging.debug(f"Authentication request (client -> AP). No. {pkt.number}")
     timestamp_authentication_request = float(pkt.sniff_timestamp)
 
-    pkt = skip_duplicate_pkt(capture_iter, is_authentication_request, ap_mac)
+    pkt = skip_duplicate_pkt(capture_iter, is_authentication_request, access_point_mac)
 
     #----------------------------------------------------
     #------Authentication response (AP -> client)--------
     #----------------------------------------------------
-    if(not is_authentication_response(pkt, ap_mac)):
+    if(not is_authentication_response(pkt, access_point_mac)):
         logging.debug(f"Missing authentication response. No. {pkt.number}")
         logging.debug(f"----------------Transaction Skipped----------------\n")
         num_skipped_transaction += 1
@@ -88,12 +90,12 @@ def process_next_transaction(capture_iter, ap_mac, outfile):
 
     time_interval_authentication = (timestamp_authentication_response - timestamp_authentication_request) * 10e+6 #us
 
-    pkt = skip_duplicate_pkt(capture_iter, is_authentication_response, ap_mac)
+    pkt = skip_duplicate_pkt(capture_iter, is_authentication_response, access_point_mac)
 
     #---------------------------------------------------
     #--------Association request (client -> AP)---------
     #---------------------------------------------------
-    if(not is_association_request(pkt, ap_mac)):
+    if(not is_association_request(pkt, access_point_mac)):
         logging.debug(f"Missing association request. No. {pkt.number}")
         logging.debug(f"----------------Transaction Skipped----------------\n")
         num_skipped_transaction += 1
@@ -102,12 +104,12 @@ def process_next_transaction(capture_iter, ap_mac, outfile):
     logging.debug(f"Association request (AP -> client). No. {pkt.number}")
     timestamp_association_request = float(pkt.sniff_timestamp)
 
-    pkt = skip_duplicate_pkt(capture_iter, is_association_request, ap_mac)
+    pkt = skip_duplicate_pkt(capture_iter, is_association_request, access_point_mac)
 
     #---------------------------------------------------
     #--------Association reponse (client -> AP)---------
     #---------------------------------------------------
-    if(not is_association_response(pkt, ap_mac)):
+    if(not is_association_response(pkt, access_point_mac)):
         logging.debug(f"Missing association response. No. {pkt.number}")
         logging.debug(f"----------------Transaction Skipped----------------\n")
         num_skipped_transaction += 1
@@ -118,53 +120,54 @@ def process_next_transaction(capture_iter, ap_mac, outfile):
 
     time_interval_association = (timestamp_association_response - timestamp_association_request) * 10e+6 #us
 
-    pkt = skip_duplicate_pkt(capture_iter, is_association_response, ap_mac)
+    pkt = skip_duplicate_pkt(capture_iter, is_association_response, access_point_mac)
     
-    #---------------------------------------------------
-    #--------EAPOL (Message 1) (AP -> client)-----------
-    #---------------------------------------------------
-    if(not is_eapol_msg_1(pkt, ap_mac)):
-        logging.debug(f"Missing eapol message 1. No. {pkt.number}")
-        logging.debug(f"----------------Transaction Skipped----------------\n")
-        num_skipped_transaction += 1
-        return
-    
-    logging.debug(f"EAPOL (Message 1) (AP -> client). No. {pkt.number}")
-    timestamp_eapol_message_1 = float(pkt.sniff_timestamp)
+    if eapol:
+        #---------------------------------------------------
+        #--------EAPOL (Message 1) (AP -> client)-----------
+        #---------------------------------------------------
+        if(not is_eapol_msg_1(pkt, access_point_mac)):
+            logging.debug(f"Missing eapol message 1. No. {pkt.number}")
+            logging.debug(f"----------------Transaction Skipped----------------\n")
+            num_skipped_transaction += 1
+            return
+        
+        logging.debug(f"EAPOL (Message 1) (AP -> client). No. {pkt.number}")
+        timestamp_eapol_message_1 = float(pkt.sniff_timestamp)
 
-    time_interval_eapol_first = (timestamp_eapol_message_1 - timestamp_association_response) * 10e+6 #us
+        time_interval_eapol_first = (timestamp_eapol_message_1 - timestamp_association_response) * 10e+6 #us
 
-    pkt = skip_duplicate_pkt(capture_iter, is_eapol_msg_1, ap_mac)
+        pkt = skip_duplicate_pkt(capture_iter, is_eapol_msg_1, access_point_mac)
 
-    #---------------------------------------------------
-    #--------EAPOL (Message 2) (client -> AP)-----------
-    #---------------------------------------------------
-    if(not is_eapol_msg_2(pkt, ap_mac)):
-        logging.debug(f"Missing eapol message 2. No. {pkt.number}")
-        logging.debug(f"----------------Transaction Skipped----------------\n")
-        num_skipped_transaction += 1
-        return
-    
-    logging.debug(f"EAPOL (Message 2) (client -> AP). No. {pkt.number}")
-    timestamp_eapol_message_2 = float(pkt.sniff_timestamp)
+        #---------------------------------------------------
+        #--------EAPOL (Message 2) (client -> AP)-----------
+        #---------------------------------------------------
+        if(not is_eapol_msg_2(pkt, access_point_mac)):
+            logging.debug(f"Missing eapol message 2. No. {pkt.number}")
+            logging.debug(f"----------------Transaction Skipped----------------\n")
+            num_skipped_transaction += 1
+            return
+        
+        logging.debug(f"EAPOL (Message 2) (client -> AP). No. {pkt.number}")
+        timestamp_eapol_message_2 = float(pkt.sniff_timestamp)
 
-    pkt = skip_duplicate_pkt(capture_iter, is_eapol_msg_1, ap_mac)
+        pkt = skip_duplicate_pkt(capture_iter, is_eapol_msg_1, access_point_mac)
 
-    #---------------------------------------------------
-    #--------EAPOL (Message 3) (AP -> client)-----------
-    #---------------------------------------------------
-    if(not is_eapol_msg_3(pkt, ap_mac)):
-        logging.debug(f"Missing eapol message 3. No. {pkt.number}")
-        logging.debug(f"----------------Transaction Skipped----------------\n")
-        num_skipped_transaction += 1
-        return
-    
-    logging.debug(f"EAPOL (Message 3) (AP -> client). No. {pkt.number}")
-    timestamp_eapol_message_3 = float(pkt.sniff_timestamp)
-    
-    time_interval_eapol_second = (timestamp_eapol_message_3 - timestamp_eapol_message_2) * 10e+6 #us
+        #---------------------------------------------------
+        #--------EAPOL (Message 3) (AP -> client)-----------
+        #---------------------------------------------------
+        if(not is_eapol_msg_3(pkt, access_point_mac)):
+            logging.debug(f"Missing eapol message 3. No. {pkt.number}")
+            logging.debug(f"----------------Transaction Skipped----------------\n")
+            num_skipped_transaction += 1
+            return
+        
+        logging.debug(f"EAPOL (Message 3) (AP -> client). No. {pkt.number}")
+        timestamp_eapol_message_3 = float(pkt.sniff_timestamp)
+        
+        time_interval_eapol_second = (timestamp_eapol_message_3 - timestamp_eapol_message_2) * 10e+6 #us
 
-    pkt = skip_duplicate_pkt(capture_iter, is_eapol_msg_3, ap_mac)
+        pkt = skip_duplicate_pkt(capture_iter, is_eapol_msg_3, access_point_mac)
 
     #Ignore last transaction packet
     #---------------------------------------------------
@@ -185,7 +188,7 @@ def process_next_transaction(capture_iter, ap_mac, outfile):
     logging.debug(f"----------------Transaction Complete {total_transaction}----------------\n")
     outfile.write(f"{time_interval_authentication},{time_interval_association},{time_interval_eapol_first},{time_interval_eapol_second}\n")
 
-def process_data_pcap(capture, ap_mac, outfile):
+def process_data_pcap(capture, ap_macs, outfile):
     global num_complete_transaction
     global num_skipped_transaction
     num_complete_transaction = 0
@@ -199,7 +202,7 @@ def process_data_pcap(capture, ap_mac, outfile):
     
     while(True):
         try:
-            process_next_transaction(capture_iter, ap_mac, outfile)
+            process_next_transaction(capture_iter, ap_macs, outfile, eapol=False)
         except StopIteration:
             break
     
@@ -210,7 +213,7 @@ def main():
     parser=argparse.ArgumentParser()
     parser.add_argument('-i', '--input', nargs='?',required=True, help='input file')
     parser.add_argument('-o', '--output', nargs='?',required=False, help='output file')
-    parser.add_argument('-a', '--access_point_mac', nargs='?',required=True, help='access point mac')
+    parser.add_argument('-a', '--access_point_mac', nargs='+',required=True, help='access point mac(s)')
     parser.add_argument('-v', '--verbose', action='store_true', help='verbose mode')
 
     args=parser.parse_args()
@@ -219,9 +222,11 @@ def main():
         logging.basicConfig(stream=sys.stderr, level=logging.DEBUG)
     
     try:
-        ap_mac=EUI(args.access_point_mac)
+        ap_macs = []
+        for mac in args.access_point_mac:
+            ap_macs.append(EUI(mac))
     except:
-        print('{} is not a MAC address'.format(args.access_point_mac))
+        print('{} is not a MAC address'.format(mac))
         sys.exit()
     
     fileInput=args.input
@@ -233,7 +238,9 @@ def main():
         fileOutput=args.output
         
     outfile = open(fileOutput,'w') 
-    
+
+    filter_access_points = "(" + " || ".join(f"(wlan.ta == {mac} || wlan.ra == {mac})" for mac in ap_macs) + ")"
+    print(filter_access_points)
     # (association request || association reponse || authentications || authentication eapol) 
     # && 
     # (AP address (transmission) || AP address (receiver) )
@@ -241,12 +248,12 @@ def main():
     (wlan.fc.type_subtype == {ASSOCIATION_REQUEST_SUBTYPE} ||  wlan.fc.type_subtype == {ASSOCIATION_RESPONSE_SUBTYPE} 
     || wlan.fc.type_subtype == {AUTHENTICATIONS_SUBTYPE} || eapol.keydes.type == 2) 
     && 
-    (wlan.ta == {ap_mac} || wlan.ra == {ap_mac})
+    {filter_access_points}
     """
     
     capture = pyshark.FileCapture(fileInput, display_filter=filter)
     with open(fileOutput,'w') as outfile:
-        process_data_pcap(capture, ap_mac, outfile)
+        process_data_pcap(capture, ap_macs, outfile)
 
 if __name__ == '__main__':
     main()
