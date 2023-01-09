@@ -42,6 +42,7 @@ def main():
     plt.title("Association transaction request/reponse interval")
     plt.xlabel("Sample number")
     plt.ylabel("Time interval (us)")
+    plt.ylim((0,1e6))
     plt.savefig(file_output)
         
     plt.show()

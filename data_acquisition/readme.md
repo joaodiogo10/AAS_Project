@@ -145,13 +145,13 @@ Use the output csv file from the previous steps as the input file.
 
 Linux
 ```console
-python3 baseObsWindows.py -i packets/homeBeacon2.csv -m 1 -w 50
+python3 baseObsWindows.py -i packets/homeBeacon2.csv -m 1 -w 100
 python3 baseObsWindows.py -i packets/homeAssociation.csv -m 1 -w 5
 ```
 
 Windows
 ```console
-py baseObsWindows.py -i packets\homeBeacon2.csv -m 1 -w 50
+py baseObsWindows.py -i packets\homeBeacon2.csv -m 1 -w 100
 py baseObsWindows.py -i packets\homeAssociation.csv -m 1 -w 5
 ```
 
@@ -159,20 +159,20 @@ py baseObsWindows.py -i packets\homeAssociation.csv -m 1 -w 5
 
 Linux
 ```console
-python3 baseObsWindows.py -i packets/homeBeacon2.csv -m 2 -s 5 -w 50
+python3 baseObsWindows.py -i packets/homeBeacon2.csv -m 2 -s 5 -w 100
 python3 baseObsWindows.py -i packets/homeAssociation.csv -m 2 -s 2 -w 5
 ```
 
 Windows
 ```console
-py baseObsWindows.py -i packets\homeBeacon2.csv -m 2 -s 5 -w 50
+py baseObsWindows.py -i packets\homeBeacon2.csv -m 2 -s 5 -w 100
 py baseObsWindows.py -i packets\homeAssociation.csv -m 2 -s 2 -w 5
 ```
 #### MULTIPLE SLIDING Observation Windows
 
 Linux
 ```console
-python3 baseObsWindows.py -i packets/homeBeacon2.csv -m 3 -s 5 -w 50 100
+python3 baseObsWindows.py -i packets/homeBeacon2.csv -m 3 -s 5 -w 100 200
 python3 baseObsWindows.py -i packets/homeAssociation.csv -m 3 -s 2 -w 5 10
 ```
 
@@ -187,12 +187,20 @@ Use the generated sliding windows outputs.
 
 Linux:
 ```
-python3 baseExtractFeatures.py -i windows/homeBeacon2_obs_m1 -w 50
+python3 baseExtractFeatures.py -i windows/homeBeacon2_obs_m1 -w 100
 python3 baseExtractFeatures.py -i windows/homeAssociation_obs_s2_m3 -w 5 10
 ```
 
 Windows:
 ```
-py baseExtractFeatures.py -i windows\homeBeacon2_obs_m1 -w 50
+py baseExtractFeatures.py -i windows\homeBeacon2_obs_m1 -w 100
 py baseExtractFeatures.py -i windows\homeAssociation_obs_s2_m3 -w 5 10
 ```
+
+## MAC list
+
+home - 84:0b:7c:b6:87:26 
+
+other_home - 00:37:b7:4f:c6:fa
+
+other2_home - 1c:20:db:d0:d7:d8

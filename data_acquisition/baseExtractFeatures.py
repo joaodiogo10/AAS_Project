@@ -8,18 +8,18 @@ import math
    
 def extractStats(data):
     nSamp,nCols=data.shape
-
     M1=np.mean(data,axis=0)
-    Md1=np.median(data,axis=0)
+    #Md1=np.median(data,axis=0)
     Std1=np.std(data,axis=0)
     S1=stats.skew(data)
     S1= list(map(lambda x: 0 if math.isnan(x) else x, S1))
     #K1=stats.kurtosis(data)
-    p=[75,90,95,98]
-    Pr1=np.array(np.percentile(data,p,axis=0)).T.flatten()
-    
-    features=np.hstack((M1,Md1,Std1,S1,Pr1))
-    print(S1)
+    #p=[75,90,95,98]
+    #Pr1=np.array(np.percentile(data,p,axis=0)).T.flatten()
+    m = np.min(data,axis=0) 
+    M = np.max(data,axis=0) 
+   
+    features=np.hstack((M1,Std1,S1,m,M))
     return(features)
 
 def extratctSilenceActivity(data,threshold=0):
@@ -110,7 +110,8 @@ def main():
     else:
         outfilename=args.output
     
-    np.savetxt(outfilename,features,fmt='%d')
+    header = "mean, standard deviation, skew, min, max"
+    np.savetxt(outfilename,features,fmt='%d', header=header)
     
     print(features.shape)
         
