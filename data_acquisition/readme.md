@@ -68,12 +68,12 @@ Example:
 
 Linux
 ```console
-python3 sampleBeaconFrame.py -i packets/homeBeacon2.pcapng -a 84:0b:7c:b6:87:26
+python3 sampleBeaconFrame.py -i packets/home.pcapng -o packets/home_beacons.csv -a 84:0b:7c:b6:87:26
 ```
 
 Windows
 ```console
-py sampleBeaconFrame.py -i packets\homeBeacon2.pcapng -a 84:0b:7c:b6:87:26
+py sampleBeaconFrame.py -i packets\home.pcapng -o packets\home_beacons.csv -a 84:0b:7c:b6:87:26
 ```
 ### Plot data
 
@@ -87,12 +87,12 @@ Example:
 
 Linux
 ```console
-python3 plotBeaconFrame.py -i packets/homeBeacon2.csv
+python3 plotBeaconFrame.py -i packets/home_beacons.csv
 ```
 
 Windows
 ```console
-py plotBeaconFrame.py -i packets\homeBeacon2.csv
+py plotBeaconFrame.py -i packets\home_beacons.csv
 ```
 
 ![beacon plot example](images/beaconPlot.png)
@@ -106,12 +106,12 @@ Example:
 
 Linux
 ```console
-python3 sampleAssociation.py -i packets/homeAssociation.pcapng -a 84:0b:7c:b6:87:26 -v 
+python3 sampleAssociation.py -i packets/home.pcapng -o packets/home_association.csv -a 84:0b:7c:b6:87:26 -v 
 ```
 
 Windows
 ```console
-py sampleAssociation.py -i packets\homeAssociation.pcapng -a 84:0b:7c:b6:87:26 -v 
+py sampleAssociation.py -i packets\home.pcapng -o packets\home_association.csv -a 84:0b:7c:b6:87:26 -v 
 ```
 ### Plot data
 
@@ -125,12 +125,12 @@ Example:
 
 Linux
 ```console
-python3 plotAssociation.py -i packets/homeAssociation.csv
+python3 plotAssociation.py -i packets/home_association.csv
 ```
 
 Windows
 ```console
-py plotAssociation.py -i packets/homeAssociation.csv
+py plotAssociation.py -i packets/home_association.csv
 ```
 
 ![association plot example](images/homeAssociation.png)
@@ -145,35 +145,35 @@ Use the output csv file from the previous steps as the input file.
 
 Linux
 ```console
-python3 baseObsWindows.py -i packets/homeBeacon2.csv -m 1 -w 100
+python3 baseObsWindows.py -i packets/home_beacons.csv -m 1 -w 100
 ```
 
 Windows
 ```console
-py baseObsWindows.py -i packets\homeBeacon2.csv -m 1 -w 100
+py baseObsWindows.py -i packets\home_beacons.csv -m 1 -w 100
 ```
 
 #### SLIDING Observation Windows
 
 Linux
 ```console
-python3 baseObsWindows.py -i packets/homeBeacon2.csv -m 2 -s 5 -w 100
+python3 baseObsWindows.py -i packets/home_beacons.csv -m 2 -s 5 -w 100
 ```
 
 Windows
 ```console
-py baseObsWindows.py -i packets\homeBeacon2.csv -m 2 -s 5 -w 100
+py baseObsWindows.py -i packets\home_beacons.csv -m 2 -s 5 -w 100
 ```
 #### MULTIPLE SLIDING Observation Windows
 
 Linux
 ```console
-python3 baseObsWindows.py -i packets/homeBeacon2.csv -m 3 -s 5 -w 100 200
+python3 baseObsWindows.py -i packets/home_beacons.csv -m 3 -s 5 -w 100 200
 ```
 
 Windows:
 ```console
-py baseObsWindows.py -i packets\homeBeacon2.csv -m 3 -s 5 -w 50 100
+py baseObsWindows.py -i packets\home_beacons.csv -m 3 -s 5 -w 50 100
 ```
 ## Extract feature
 
@@ -181,12 +181,12 @@ Use the generated sliding windows outputs.
 
 Linux:
 ```
-python3 baseExtractFeatures.py -i windows/homeBeacon2_obs_m1 -w 100
+python3 baseExtractFeatures.py -i windows/home_beacons_obs_m1 -w 100
 ```
 
 Windows:
 ```
-py baseExtractFeatures.py -i windows\homeBeacon2_obs_m1 -w 100
+py baseExtractFeatures.py -i windows\home_beacons_obs_m1 -w 100
 ```
 
 ## MAC list
