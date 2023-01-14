@@ -151,7 +151,7 @@ def process_next_transaction(capture_iter, ap_macs, outfile, eapol=True):
         logging.debug(f"EAPOL (Message 2) (client -> AP). No. {pkt.number}")
         timestamp_eapol_message_2 = float(pkt.sniff_timestamp)
 
-        pkt = skip_duplicate_pkt(capture_iter, is_eapol_msg_1, access_point_mac)
+        pkt = skip_duplicate_pkt(capture_iter, is_eapol_msg_2, access_point_mac)
 
         #---------------------------------------------------
         #--------EAPOL (Message 3) (AP -> client)-----------
@@ -202,7 +202,7 @@ def process_data_pcap(capture, ap_macs, outfile):
     
     while(True):
         try:
-            process_next_transaction(capture_iter, ap_macs, outfile, eapol=False)
+            process_next_transaction(capture_iter, ap_macs, outfile, eapol=True)
         except StopIteration:
             break
     
